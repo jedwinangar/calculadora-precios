@@ -93,16 +93,3 @@ jobs:
         with:
           name: calculadora-precios-windows
           path: CalculadoraPrecios-Windows.zip
-      - name: Comprimir aplicación Windows
-        shell: pwsh
-        run: |
-          Compress-Archive `
-            -Path build/windows/x64/runner/Release/* `
-            -DestinationPath CalculadoraPrecios-Windows.zip `
-            -Force
-
-      - name: Guardar aplicación Windows
-        uses: actions/upload-artifact@v4
-        with:
-          name: calculadora-precios-windows
-          path: CalculadoraPrecios-Windows.zip
