@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - principal
+      - main
 
 jobs:
 
@@ -21,6 +21,15 @@ jobs:
         with:
           channel: stable
           cache: true
+
+      - name: Verificar código
+        run: |
+          echo "Commit compilado:"
+          git rev-parse HEAD
+          echo "Formula RADEC:"
+          grep -n "1.9604" lib/main.dart
+          echo "Configuración de proveedores:"
+          grep -n "ProviderSettingsPage" lib/main.dart
 
       - name: Generar archivos Android
         run: flutter create --platforms=android .
@@ -52,6 +61,16 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Verificar código
+        shell: pwsh
+        run: |
+          Write-Host "Commit compilado:"
+          git rev-parse HEAD
+          Write-Host "Formula RADEC:"
+          Select-String -Path lib/main.dart -Pattern "1.9604"
+          Write-Host "Configuración de proveedores:"
+          Select-String -Path lib/main.dart -Pattern "ProviderSettingsPage"
+
       - name: Generar archivos Windows
         run: flutter create --platforms=windows .
 
@@ -61,6 +80,19 @@ jobs:
       - name: Compilar Windows
         run: flutter build windows --release
 
+      - name: Comprimir aplicación Windows
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path build/windows/x64/runner/Release/* `
+            -DestinationPath CalculadoraPrecios-Windows.zip `
+            -Force
+
+      - name: Guardar aplicación Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: calculadora-precios-windows
+          path: CalculadoraPrecios-Windows.zip
       - name: Comprimir aplicación Windows
         shell: pwsh
         run: |
