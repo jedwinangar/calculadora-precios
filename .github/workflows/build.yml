@@ -26,6 +26,12 @@ jobs:
         run: |
           echo "Commit compilado:"
           git rev-parse HEAD
+          echo "Rama:"
+          git branch --show-current
+          echo "Contenido del proyecto:"
+          ls -la
+          echo "Contenido de lib:"
+          ls -la lib
           echo "Formula RADEC:"
           grep -n "1.9604" lib/main.dart
           echo "Configuración de proveedores:"
